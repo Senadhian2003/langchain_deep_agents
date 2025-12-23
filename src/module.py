@@ -5,8 +5,26 @@ from langchain_openai import AzureChatOpenAI
 from dotenv import load_dotenv
 from langchain.chat_models import init_chat_model
 from deepagents import create_deep_agent
+from langfuse import get_client
+from langfuse.langchain import CallbackHandler
 
 load_dotenv() 
+
+
+
+# Initialize Langfuse client
+langfuse = get_client()
+ 
+# Verify connection
+if langfuse.auth_check():
+    print("Langfuse client is authenticated and ready!")
+else:
+    print("Authentication failed. Please check your credentials and host.")
+ 
+# Initialize Langfuse CallbackHandler for LangChain (tracing)
+langfuse_handler = CallbackHandler()
+
+
 tavily_api_key = os.environ["TAVILY_API_KEY"]
 
 
@@ -63,7 +81,13 @@ agent = create_deep_agent(
 )
 
 
-result = agent.invoke({"messages": [{"role": "user", "content": "Who is ben 10"}]})
+# Invoke the agent with Langfuse tracing
+result = agent.invoke(
+    {"messages": [{"role": "user", "content": "Search from internet about latest gpt model and provide summary about it"}]}, 
+    config={"callbacks": [langfuse_handler]}
+)
 
 # Print the agent's response
 print(result["messages"][-1].content)
+
+print("END")
