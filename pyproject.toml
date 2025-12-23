@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "deep_agents"
+authors = [
+    {name = "Example Author", email = "author@example.com"}
+]
+description = "package description"
+version = "0.0.1"
+readme = "README.md"
+dependencies = [
+    "deepagents>=0.3.0",
+    "dotenv>=0.9.9",
+    "langchain-openai>=1.1.4",
+    "tavily-python>=0.7.16",
+] 
